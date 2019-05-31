@@ -1,7 +1,6 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Наталия Казакова](https://up.htmlacademy.ru/javascript/17/user/308987).
-* Наставник: `Неизвестно`.
 
 ---
 
