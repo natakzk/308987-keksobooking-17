@@ -122,12 +122,14 @@ var renderPinList = function () {
   return pinList;
 };
 
-// активное состояние
-mainMapPin.addEventListener('click', function () {
+var activate = function () {
   activateEl();
   renderPinList();
   disableElements(false);
-});
+}
+
+// активное состояние
+mainMapPin.addEventListener('click', activate);
 
 // адрес пина (острый конец пина)
 mainMapPin.addEventListener('mouseup', function () {
