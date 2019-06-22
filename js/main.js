@@ -1,5 +1,9 @@
 'use strict';
 
+var PIN_WIDTH = 62;
+var PIN_HEIGHT = 62;
+var PIN_TAIL_HEIGHT = 22;
+
 var AVATAR = {
   imgNumbers: ['01', '02', '03', '04', '05', '06', '07', '08'],
   path: 'img/avatars/user',
@@ -18,6 +22,7 @@ var map = document.querySelector('.map');
 var pinList = map.querySelector('.map__pins');
 var mainMapPin = pinList.querySelector('.map__pin--main');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var adresInput = document.querySelector("#address");
 
 // взять случайный элемент из диапазона
 function getElFromRange(min, max) {
@@ -36,6 +41,9 @@ var getRandomUniqueEl = function (array) {
 var getRandomEl = function (array) {
   return array[Math.floor((Math.random() * array.length))];
 };
+
+// изначальное значение поля "адрес"
+adresInput.value = parseInt(mainMapPin.style.left, 10) + ', ' + parseInt(mainMapPin.style.top, 10);
 
 // неактивное состояние
 var disableElements = function (param) {
@@ -120,6 +128,14 @@ mainMapPin.addEventListener('click', function () {
   renderPinList();
   disableElements(false);
 });
+
+// адрес пина (острый конец пина)
+mainMapPin.addEventListener('mouseup', function () {
+  adresInput.value = parseInt(mainMapPin.style.left, 10) + ', ' + (parseInt(mainMapPin.style.top, 10)
+    + PIN_HEIGHT / 2 + PIN_TAIL_HEIGHT);
+});
+
+
 
 
 
