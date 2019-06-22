@@ -86,11 +86,30 @@ var renderPinList = function () {
   pinList.appendChild(fragment);
   return pinList;
 }
-renderPinList();
+// renderPinList();
 
 
 // показ попапа
-var showElement = function () {
-  return map.classList.remove('map--faded');
+// var showElement = function () {
+//   return map.classList.remove('map--faded');
+// };
+// showElement();
+
+
+var disableElements = function () {
+  var adFormFieldsets = document.querySelector('.ad-form').getElementsByTagName('fieldset');
+  var mapFiltersSelectInputs = document.querySelector('.map__filters').getElementsByTagName('select');
+  var mapFiltersFieldsets = document.querySelector('.map__filters').getElementsByTagName('fieldset');
+
+  var disableFields = function (arr) {
+    for( var i = 0; i < arr.length; i++ ){
+      arr[i].disabled = true;
+    }
+  }
+
+  disableFields(adFormFieldsets);
+  disableFields(mapFiltersSelectInputs);
+  disableFields(mapFiltersFieldsets);
 };
-showElement();
+
+disableElements();
