@@ -16,6 +16,7 @@ var ads = [];
 var numberOfAds = 8;
 var map = document.querySelector('.map');
 var pinList = map.querySelector('.map__pins');
+var mainMapPin = pinList.querySelector('.map__pin--main');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 // взять случайный элемент из диапазона
@@ -35,6 +36,25 @@ var getRandomUniqueEl = function (array) {
 var getRandomEl = function (array) {
   return array[Math.floor((Math.random() * array.length))];
 };
+
+// неактивное состояние
+var disableElements = function (param) {
+  var adFormFieldsets = document.querySelector('.ad-form').getElementsByTagName('fieldset');
+  var mapFiltersSelectInputs = document.querySelector('.map__filters').getElementsByTagName('select');
+  var mapFiltersFieldsets = document.querySelector('.map__filters').getElementsByTagName('fieldset');
+
+  var disableFields = function (arr) {
+    for( var i = 0; i < arr.length; i++ ){
+      arr[i].disabled = param;
+    }
+  }
+
+  disableFields(adFormFieldsets);
+  disableFields(mapFiltersSelectInputs);
+  disableFields(mapFiltersFieldsets);
+};
+
+disableElements(true);
 
 // генерация объекта со случайными данными
 var getAd = function () {
@@ -77,6 +97,13 @@ var renderPin = function (ad) {
   return pinEl;
 }
 
+// показ попапа
+var activateEl = function () {
+  var adForm = document.querySelector('.ad-form');
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+};
+
 // отрисовка 8 пинов с заполненными случайными данными
 var renderPinList = function () {
   var fragment = document.createDocumentFragment();
@@ -85,31 +112,16 @@ var renderPinList = function () {
   }
   pinList.appendChild(fragment);
   return pinList;
-}
-// renderPinList();
-
-
-// показ попапа
-// var showElement = function () {
-//   return map.classList.remove('map--faded');
-// };
-// showElement();
-
-
-var disableElements = function () {
-  var adFormFieldsets = document.querySelector('.ad-form').getElementsByTagName('fieldset');
-  var mapFiltersSelectInputs = document.querySelector('.map__filters').getElementsByTagName('select');
-  var mapFiltersFieldsets = document.querySelector('.map__filters').getElementsByTagName('fieldset');
-
-  var disableFields = function (arr) {
-    for( var i = 0; i < arr.length; i++ ){
-      arr[i].disabled = true;
-    }
-  }
-
-  disableFields(adFormFieldsets);
-  disableFields(mapFiltersSelectInputs);
-  disableFields(mapFiltersFieldsets);
 };
 
-disableElements();
+// активное состояние
+mainMapPin.addEventListener('click', function () {
+  activateEl();
+  renderPinList();
+  disableElements(false);
+});
+
+
+
+
+
