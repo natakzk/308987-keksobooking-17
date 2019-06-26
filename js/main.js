@@ -129,15 +129,6 @@ var activate = function () {
   disableElements(false);
 }
 
-// активное состояние
-mainMapPin.addEventListener('click', activate);
-
-// адрес пина (острый конец пина)
-mainMapPin.addEventListener('mouseup', function () {
-  adresInput.value = parseInt(mainMapPin.style.left, 10) + ', ' + (parseInt(mainMapPin.style.top, 10)
-    + PIN_HEIGHT / 2 + PIN_TAIL_HEIGHT);
-});
-
 // изменение минимально допустимой цены и плейсхолдера цены в зависимости от типа жилья
 var changePrice = function () {
   var type = document.getElementById('type');
@@ -167,3 +158,76 @@ var changeTime = function () {
 };
 
 changeTime();
+
+mainMapPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  activate();
+
+  var startCoords = {
+    x: mainMapPin.style.left,
+    y: mainMapPin.style.top
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var dragLimit = {
+      X: {
+        MIN: 0,
+        MAX: 1200
+      },
+      Y: {
+        MIN: 130,
+        MAX: 630
+      }
+    };
+
+    var border = {
+      TOP: dragLimit.Y.MIN - PIN_HEIGHT - PIN_TAIL_HEIGHT,
+      BOTTOM: dragLimit.Y.MAX - PIN_HEIGHT - PIN_TAIL_HEIGHT,
+      LEFT: dragLimit.X.MIN,
+      RIGHT: dragLimit.X.MAX - PIN_WIDTH
+    };
+
+    var mainMapPinPosition = {
+      x: mainMapPin.offsetLeft - shift.x,
+      y: mainMapPin.offsetTop - shift.y
+    };
+
+    if (mainMapPinPosition.x >= border.LEFT && mainMapPinPosition.x <= border.RIGHT) {
+      mainMapPin.style.left = mainMapPinPosition.x + 'px';
+    }
+
+    if (mainMapPinPosition.y >= border.TOP && mainMapPinPosition.y <= border.BOTTOM) {
+      mainMapPin.style.top = mainMapPinPosition.y + 'px';
+    }
+
+
+    adresInput.value = parseInt(mainMapPin.style.left, 10) + ', ' + (parseInt(mainMapPin.style.top, 10)
+    + PIN_HEIGHT / 2 + PIN_TAIL_HEIGHT);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    adresInput.value = parseInt(mainMapPin.style.left, 10) + ', ' + (parseInt(mainMapPin.style.top, 10)
+    + PIN_HEIGHT / 2 + PIN_TAIL_HEIGHT);
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+
+});
