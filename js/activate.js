@@ -85,19 +85,34 @@
   };
 
   // отрисовка 8 пинов с заполненными случайными данными
-  var renderPinList = function () {
+  // var renderPinList = function () {
+  //   var fragment = document.createDocumentFragment();
+  //   for (var i = 0; i < numberOfAds; i++) {
+  //     fragment.appendChild(renderPin(ads[i]));
+  //   }
+  //   window.util.pinList.appendChild(fragment);
+  //   return window.util.pinList;
+  // };
+
+  var successHandler = function (pins) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < numberOfAds; i++) {
-      fragment.appendChild(renderPin(ads[i]));
+    for (var i = 0; i < pins.length; i++) {
+      fragment.appendChild(renderPin(pins[i]));
     }
     window.util.pinList.appendChild(fragment);
-    return window.util.pinList;
+  };
+
+  var errorHandler = function () {
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorEl = errorTemplate.cloneNode(true);
+    var main = document.querySelector('main');
+    main.appendChild(errorEl);
   };
 
   var activate = function () {
     activateEl();
-    renderPinList();
     window.default.disableElements(false);
+    window.backend.load(successHandler, errorHandler);
   }
 
   window.activate = {
